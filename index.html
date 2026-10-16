@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#16352f">
+  <meta name="description" content="A private, offline-first personal food, activity and progress tracker.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <title>Everwell Tracker</title>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#dashboard" aria-label="Everwell home"><span class="brand-mark">E</span><span>Everwell</span></a>
+    <div class="date-wrap"><label for="active-date">Tracking date</label><input id="active-date" type="date"></div>
+  </header>
+
+  <main id="app" tabindex="-1">
+    <section class="view" data-view="dashboard">
+      <div class="hero">
+        <div><p class="eyebrow">Your daily rhythm</p><h1 id="greeting">Good day</h1><p class="muted">Small records. Clear patterns. No accounts, no adverts.</p></div>
+        <div class="ring" id="calorie-ring"><div><strong id="ring-value">0</strong><span>kcal left</span></div></div>
+      </div>
+      <div class="metric-grid" id="daily-metrics"></div>
+      <div class="two-col">
+        <article class="card"><div class="card-head"><div><p class="eyebrow">Today</p><h2>Meals</h2></div><button class="text-btn" data-go="food">Open diary</button></div><div id="dashboard-meals" class="compact-list"></div></article>
+        <article class="card"><div class="card-head"><div><p class="eyebrow">Last 8 entries</p><h2>Weight trend</h2></div><button class="text-btn" data-go="progress">View progress</button></div><div id="mini-chart" class="chart"></div></article>
+      </div>
+    </section>
+
+    <section class="view" data-view="food" hidden>
+      <div class="page-head"><div><p class="eyebrow">Daily record</p><h1>Food diary</h1><p class="muted">Add foods manually or use a saved recipe.</p></div><button class="primary" data-open="food-dialog">+ Add food</button></div>
+      <div class="metric-grid" id="food-metrics"></div>
+      <div id="meal-sections"></div>
+    </section>
+
+    <section class="view" data-view="recipes" hidden>
+      <div class="page-head"><div><p class="eyebrow">Reusable meals</p><h1>Recipes</h1><p class="muted">Nutrition is calculated from the ingredients you enter.</p></div><button class="primary" id="new-recipe">+ New recipe</button></div>
+      <div id="recipe-grid" class="recipe-grid"></div>
+    </section>
+
+    <section class="view" data-view="activity" hidden>
+      <div class="page-head"><div><p class="eyebrow">Movement log</p><h1>Activity</h1><p class="muted">Record exercise, steps and active calories.</p></div><button class="primary" data-open="activity-dialog">+ Add activity</button></div>
+      <div class="metric-grid" id="activity-metrics"></div>
+      <article class="card"><h2>Activity log</h2><div id="activity-list" class="list"></div></article>
+    </section>
+
+    <section class="view" data-view="progress" hidden>
+      <div class="page-head"><div><p class="eyebrow">Long-term view</p><h1>Progress</h1><p class="muted">Weight and measurements stay on this device.</p></div><button class="primary" data-open="progress-dialog">+ Add check-in</button></div>
+      <article class="card chart-card"><div class="card-head"><h2>Weight</h2><span id="weight-change" class="pill"></span></div><div id="progress-chart" class="chart large"></div></article>
+      <article class="card"><h2>Check-ins</h2><div id="progress-list" class="list"></div></article>
+    </section>
+
+    <section class="view" data-view="settings" hidden>
+      <div class="page-head"><div><p class="eyebrow">Your app</p><h1>Settings & privacy</h1><p class="muted">No account. No cloud database. Your entries remain in this browser.</p></div></div>
+      <div class="two-col">
+        <form class="card form" id="goal-form"><h2>Daily goals</h2><label>Energy target (kcal)<input name="calories" type="number" min="800" max="10000" required></label><label>Protein target (g)<input name="protein" type="number" min="0" max="1000" required></label><label>Step target<input name="steps" type="number" min="0" max="100000" step="100" required></label><button class="primary" type="submit">Save goals</button></form>
+        <article class="card"><h2>Private backup</h2><p class="muted">Export a JSON backup before clearing browser data or changing phones.</p><div class="button-stack"><button id="export-data" class="secondary">Export backup</button><label class="secondary file-label">Import backup<input id="import-data" type="file" accept="application/json" hidden></label><button id="clear-data" class="danger">Erase all local data</button></div><hr><h3>Apple Health later</h3><p class="muted">A future iPhone Shortcut can send selected Health data into this app. HealthKit does not automatically sync with a website, so we will test the exact Shortcut workflow on your iPhone before relying on it.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <a href="#dashboard" data-nav="dashboard"><span>⌂</span>Today</a><a href="#food" data-nav="food"><span>◒</span>Food</a><a href="#recipes" data-nav="recipes"><span>▤</span>Recipes</a><a href="#activity" data-nav="activity"><span>↗</span>Activity</a><a href="#progress" data-nav="progress"><span>⌁</span>Progress</a><a href="#settings" data-nav="settings"><span>⚙</span>Settings</a>
+  </nav>
+
+  <dialog id="food-dialog"><form method="dialog" class="dialog-form" id="food-form"><div class="dialog-head"><h2>Add food</h2><button value="cancel" class="icon-btn" aria-label="Close">×</button></div><input name="id" type="hidden"><label>Meal<select name="meal"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snacks</option></select></label><label>Food or meal name<input name="name" required maxlength="80" placeholder="e.g. Greek yoghurt and berries"></label><div class="form-grid"><label>Calories<input name="calories" type="number" min="0" max="10000" required></label><label>Protein (g)<input name="protein" type="number" min="0" max="1000" step="0.1" value="0"></label><label>Carbs (g)<input name="carbs" type="number" min="0" max="1000" step="0.1" value="0"></label><label>Fat (g)<input name="fat" type="number" min="0" max="1000" step="0.1" value="0"></label></div><button class="primary" value="default" type="submit">Save food</button></form></dialog>
+  <dialog id="recipe-dialog"><form method="dialog" class="dialog-form wide" id="recipe-form"><div class="dialog-head"><h2 id="recipe-dialog-title">New recipe</h2><button value="cancel" class="icon-btn" aria-label="Close">×</button></div><input name="id" type="hidden"><div class="form-grid"><label>Recipe name<input name="name" required maxlength="80"></label><label>Servings<input name="servings" type="number" min="1" max="100" value="1" required></label></div><div class="ingredient-head"><h3>Ingredients</h3><button id="add-ingredient" class="text-btn" type="button">+ Add ingredient</button></div><div id="ingredients"></div><p class="muted small">Enter nutrition for the quantity used in the full recipe. Values per serving are calculated automatically.</p><button class="primary" value="default" type="submit">Save recipe</button></form></dialog>
+  <dialog id="activity-dialog"><form method="dialog" class="dialog-form" id="activity-form"><div class="dialog-head"><h2>Add activity</h2><button value="cancel" class="icon-btn" aria-label="Close">×</button></div><input name="id" type="hidden"><label>Activity<input name="name" required maxlength="80" placeholder="e.g. Brisk walk"></label><div class="form-grid"><label>Minutes<input name="minutes" type="number" min="0" max="1440" value="30"></label><label>Steps<input name="steps" type="number" min="0" max="200000" value="0"></label><label>Active calories<input name="calories" type="number" min="0" max="10000" value="0"></label></div><button class="primary" value="default" type="submit">Save activity</button></form></dialog>
+  <dialog id="progress-dialog"><form method="dialog" class="dialog-form" id="progress-form"><div class="dialog-head"><h2>Add check-in</h2><button value="cancel" class="icon-btn" aria-label="Close">×</button></div><input name="id" type="hidden"><label>Date<input name="date" type="date" required></label><div class="form-grid"><label>Weight (kg)<input name="weight" type="number" min="20" max="500" step="0.1" required></label><label>Waist (cm)<input name="waist" type="number" min="0" max="300" step="0.1"></label></div><label>Note<textarea name="note" maxlength="240" rows="3"></textarea></label><button class="primary" value="default" type="submit">Save check-in</button></form></dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>
