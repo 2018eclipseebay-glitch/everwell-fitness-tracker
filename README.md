@@ -1,6 +1,6 @@
 # Everwell Fitness Tracker — Version 2
 
-Everwell is a zero-cost, offline-first personal fitness tracker. It records food, editable recipes, activity, daily goals, weight and waist measurements. There is no account, analytics service, advertising code or cloud database.
+Everwell is a zero-cost, offline-first personal fitness tracker. It records food, reusable saved products, editable recipes, activity, daily goals, weight and waist measurements. There is no account, analytics service, advertising code or cloud database.
 
 ## Privacy and backups
 
